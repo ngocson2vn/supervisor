@@ -50,6 +50,9 @@ import supervisor.medusa.text_socket as socket
 from supervisor.medusa import asyncore_25 as asyncore
 from supervisor.compat import long
 
+from supervisor import slogger
+from supervisor.compat import as_bytes
+
 class async_chat (asyncore.dispatcher):
     """This is an abstract class.  You must derive from this class, and add
     the two methods collect_incoming_data() and found_terminator()"""
@@ -209,6 +212,7 @@ class async_chat (asyncore.dispatcher):
 
     def initiate_send (self):
         obs = self.ac_out_buffer_size
+        slogger.log2("obs: %s" % obs)
         # try to refill the buffer
         if len (self.ac_out_buffer) < obs:
             self.refill_buffer()
@@ -216,7 +220,10 @@ class async_chat (asyncore.dispatcher):
         if self.ac_out_buffer and self.connected:
             # try to send the buffer
             try:
+                slogger.log2("ac_out_buffer: %r" % as_bytes(self.ac_out_buffer))
+                slogger.log2("ac_out_buffer[:obs]: %r" % as_bytes(self.ac_out_buffer[:obs]))
                 num_sent = self.send (self.ac_out_buffer[:obs])
+                slogger.log2("num_sent: %s\n" % num_sent)
                 if num_sent:
                     self.ac_out_buffer = self.ac_out_buffer[num_sent:]
 

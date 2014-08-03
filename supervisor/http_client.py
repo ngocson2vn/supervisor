@@ -12,6 +12,9 @@ from supervisor.compat import as_string
 from supervisor.compat import encodestring
 from supervisor.medusa import asynchat_25 as asynchat
 
+from supervisor import slogger
+from time import sleep
+
 CR="\x0d"
 LF="\x0a"
 CRLF=CR+LF
@@ -149,6 +152,8 @@ class HTTPHandler(asynchat.async_chat):
 
         self.ac_in_buffer = as_bytes(self.ac_in_buffer) + as_bytes(data)
 
+        slogger.log2("handle_read ac_in_buffer: \n%s\n" % self.ac_in_buffer)
+
         while self.ac_in_buffer:
             lb = len(self.ac_in_buffer)
             terminator = self.get_terminator()
@@ -180,9 +185,11 @@ class HTTPHandler(asynchat.async_chat):
                     self.ac_in_buffer = ''
 
     def feed(self, data):
-        self.listener.feed(self.url, as_string(data))
+        # self.listener.feed(self.url, as_string(data))
+        pass
 
     def collect_incoming_data(self, data):
+        slogger.log2("collect_incoming_data data: \n%s\n" % data)
         if PY3:
             self.buffer = as_string(self.buffer) + as_string(data)
         else:
@@ -219,6 +226,8 @@ class HTTPHandler(asynchat.async_chat):
 
     def headers(self):
         line = self.buffer
+
+        slogger.log2("line: %r\n" % line)
 
         if not line:
             if self.encoding=="chunked":
@@ -265,6 +274,7 @@ class HTTPHandler(asynchat.async_chat):
 
     def chunked_body(self):
         line = self.buffer
+        slogger.log2("chunked_body: %r\n" % line)
         self.set_terminator(CRLF)
         self.part = self.chunked_size
         self.feed(line)
