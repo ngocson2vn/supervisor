@@ -95,6 +95,7 @@ class async_chat (asyncore.dispatcher):
             return
 
         self.ac_in_buffer += data
+        slogger.log("handle_read ac_in_buffer: \n%r\n" % as_bytes(self.ac_in_buffer))
 
         # Continue to search for self.terminator in self.ac_in_buffer,
         # while calling self.collect_incoming_data.  The while loop

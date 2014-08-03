@@ -227,9 +227,9 @@ class Supervisor:
                 if fd in combined_map:
                     try:
                         dispatcher = combined_map[fd]
-                        self.options.logger.blather(
-                            'read event caused by %(dispatcher)s',
-                            dispatcher=dispatcher)
+                        # self.options.logger.blather(
+                        #     'read event caused by %(dispatcher)s',
+                        #     dispatcher=dispatcher)
                         dispatcher.handle_read_event()
                     except asyncore.ExitNow:
                         raise

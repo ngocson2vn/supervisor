@@ -43,6 +43,9 @@ from supervisor.options import split_namespec
 from supervisor import xmlrpc
 from supervisor import states
 
+from supervisor import slogger
+slogger.side[0] = "SUPERVISORCTL"
+
 class fgthread(threading.Thread):
     """ A subclass of threading.Thread, with a kill() method.
     To be used for foreground output/error streaming.
@@ -202,6 +205,7 @@ class Controller(cmd.Cmd):
     def upcheck(self):
         try:
             supervisor = self.get_supervisor()
+            slogger.flog("supervisor: %s\n" % supervisor)
             api = supervisor.getVersion() # deprecated
             from supervisor import rpcinterface
             if api != rpcinterface.API_VERSION:
@@ -576,6 +580,7 @@ class DefaultControllerPlugin(ControllerPluginBase):
             self.ctl.output(line)
 
     def do_status(self, arg):
+        slogger.flog("do_status\n")
         if not self.ctl.upcheck():
             return
 
@@ -1189,6 +1194,7 @@ def main(args=None, options=None):
         options = ClientOptions()
     options.realize(args, doc=__doc__)
     c = Controller(options)
+    slogger.log2("Instance Controller\n")
     if options.args:
         c.onecmd(" ".join(options.args))
     if options.interactive:
@@ -1216,6 +1222,7 @@ def main(args=None, options=None):
         except ImportError:
             pass
         try:
+            slogger.flog("main\n")
             c.cmdqueue.append('status')
             c.cmdloop()
         except KeyboardInterrupt:

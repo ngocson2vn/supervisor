@@ -171,9 +171,9 @@ class POutputDispatcher(PDispatcher):
                 self.childlog.info(data)
             if self.log_to_mainlog:
                 msg = '%(name)r %(channel)s output:\n%(data)s'
-                config.options.logger.log(
-                    self.mainlog_level, msg, name=config.name,
-                    channel=self.channel, data=data)
+                # config.options.logger.log(
+                #     self.mainlog_level, msg, name=config.name,
+                #     channel=self.channel, data=data)
             if self.channel == 'stdout':
                 if self.stdout_events_enabled:
                     notify(
@@ -325,7 +325,7 @@ class PEventListenerDispatcher(PDispatcher):
             self.state_buffer += data
             procname = self.process.config.name
             msg = '%r %s output:\n%s' % (procname, self.channel, data)
-            self.process.config.options.logger.debug(msg)
+            # self.process.config.options.logger.debug(msg)
 
             if self.childlog:
                 if self.process.config.options.strip_ansi:
