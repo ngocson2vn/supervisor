@@ -95,7 +95,7 @@ class async_chat (asyncore.dispatcher):
             return
 
         self.ac_in_buffer += data
-        slogger.log("handle_read ac_in_buffer: \n%r\n" % as_bytes(self.ac_in_buffer))
+        slogger.log("handle_read ac_in_buffer: \n%r" % as_bytes(self.ac_in_buffer))
 
         # Continue to search for self.terminator in self.ac_in_buffer,
         # while calling self.collect_incoming_data.  The while loop
@@ -131,6 +131,8 @@ class async_chat (asyncore.dispatcher):
                 #    collect data
                 terminator_len = len(terminator)
                 index = self.ac_in_buffer.find(terminator)
+                slogger.log("terminator: %r" % as_bytes(terminator))
+                slogger.log("index: %s" % index)
                 if index != -1:
                     # we found the terminator
                     if index > 0:
@@ -223,6 +225,7 @@ class async_chat (asyncore.dispatcher):
             try:
                 slogger.log2("ac_out_buffer: %r" % as_bytes(self.ac_out_buffer))
                 slogger.log2("ac_out_buffer[:obs]: %r" % as_bytes(self.ac_out_buffer[:obs]))
+                slogger.log("initiate_send data: \n%r\n" % self.ac_out_buffer[:obs])
                 num_sent = self.send (self.ac_out_buffer[:obs])
                 slogger.log2("num_sent: %s\n" % num_sent)
                 if num_sent:

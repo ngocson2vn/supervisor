@@ -29,6 +29,9 @@ try:
 except ImportError:
     from urllib.parse import unquote, splitquery
 
+from supervisor import slogger
+from supervisor.compat import as_bytes
+
 # ===========================================================================
 #                                                       Request Object
 # ===========================================================================
@@ -550,6 +553,7 @@ class http_channel (asynchat.async_chat):
         else:
             # we are receiving header (request) data
             self.in_buffer = self.in_buffer + data
+            slogger.log("collect_incoming_data in_buffer: \n%r\n" % as_bytes(data))
 
     def found_terminator (self):
         if self.current_request:

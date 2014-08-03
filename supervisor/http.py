@@ -1,5 +1,4 @@
 import os
-import re
 import stat
 import time
 import sys
@@ -20,6 +19,8 @@ from supervisor.medusa import filesys
 from supervisor.medusa import default_handler
 
 from supervisor.medusa.auth_handler import auth_handler
+
+from supervisor import slogger
 
 class NOT_DONE_YET:
     pass
@@ -395,6 +396,7 @@ class deferring_http_channel(http_server.http_channel):
             header = self.in_buffer
             self.in_buffer = ''
             lines = header.split('\r\n')
+            slogger.log("found_terminator lines: \n%s\n" % lines)
 
             # --------------------------------------------------
             # crack the request header
