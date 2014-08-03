@@ -1,0 +1,1 @@
+/home/son/Study/StudyPython/slogger.py
