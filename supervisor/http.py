@@ -216,6 +216,7 @@ class deferring_http_request(http_server.http_request):
         if globbing:
             outgoing_producer = deferring_globbing_producer(outgoing_producer)
 
+        slogger.log("outgoing_producer: %s\n" % outgoing_producer)
         self.channel.push_with_producer(outgoing_producer)
 
         self.channel.current_request = None
