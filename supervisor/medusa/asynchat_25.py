@@ -227,6 +227,7 @@ class async_chat (asyncore.dispatcher):
                 slogger.log2("ac_out_buffer[:obs]: %r" % as_bytes(self.ac_out_buffer[:obs]))
                 slogger.log("initiate_send data: \n%r\n" % self.ac_out_buffer[:obs])
                 num_sent = self.send (self.ac_out_buffer[:obs])
+                slogger.log("num_sent: %s\n" % num_sent)
                 slogger.log2("num_sent: %s\n" % num_sent)
                 if num_sent:
                     self.ac_out_buffer = self.ac_out_buffer[num_sent:]

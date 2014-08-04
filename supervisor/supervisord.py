@@ -44,6 +44,8 @@ from supervisor import events
 from supervisor.states import SupervisorStates
 from supervisor.states import getProcessStateDescription
 
+from supervisor import slogger
+
 class Supervisor:
     stopping = False # set after we detect that we are handling a stop request
     lastshutdownreport = 0 # throttle for delayed process error reports at stop
@@ -182,8 +184,12 @@ class Supervisor:
         timeout = 1 # this cannot be fewer than the smallest TickEvent (5)
 
         socket_map = self.options.get_socket_map()
+        while_count = 0
 
         while 1:
+            while_count += 1
+            slogger.log("======== WHILE ========: %s\n" % while_count, '\n\n')
+
             combined_map = {}
             combined_map.update(socket_map)
             combined_map.update(self.get_process_map())

@@ -342,9 +342,11 @@ class deferring_http_channel(http_server.http_channel):
             last_writable_check = self.writable_check
             self.writable_check = now
             elapsed = now - last_writable_check
+
             if elapsed > self.delay:
                 return True
             else:
+                slogger.log("--> NOT WRITABLE\n")
                 return False
 
         # It is possible that self.ac_out_buffer is equal b''
@@ -656,6 +658,7 @@ class tail_f_producer:
             # file descriptor was closed
             return ''
         bytes_added = newsz - self.sz
+        slogger.log("bytes_added: %s\n" % bytes_added)
         if bytes_added < 0:
             self.sz = 0
             return "==> File truncated <==\n"
@@ -664,6 +667,7 @@ class tail_f_producer:
             bytes = self.file.read(bytes_added)
             self.sz = newsz
             return as_string(bytes)
+        slogger.log("return NOT_DONE_YET\n")
         return NOT_DONE_YET
 
     def fsize(self):
