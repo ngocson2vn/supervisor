@@ -188,7 +188,7 @@ class Supervisor:
 
         while 1:
             while_count += 1
-            slogger.log("======== WHILE ========: %s\n" % while_count, '\n\n')
+            # slogger.log("======== WHILE ========: %s\n" % while_count, '\n\n')
 
             combined_map = {}
             combined_map.update(socket_map)

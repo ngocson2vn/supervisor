@@ -44,6 +44,7 @@ from supervisor import xmlrpc
 from supervisor import states
 
 from supervisor import slogger
+import time
 slogger.side[0] = "SUPERVISORCTL"
 
 class fgthread(threading.Thread):
@@ -1195,8 +1196,10 @@ def main(args=None, options=None):
     options.realize(args, doc=__doc__)
     c = Controller(options)
     slogger.log2("Instance Controller\n")
+    t = time.time()
     if options.args:
         c.onecmd(" ".join(options.args))
+        slogger.log2("duration: %s\n" % (time.time() - t))
     if options.interactive:
         try:
             import readline

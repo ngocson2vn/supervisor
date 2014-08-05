@@ -22,6 +22,7 @@ from supervisor.medusa.xmlrpc_handler import xmlrpc_handler
 from supervisor.medusa import producers
 
 from supervisor.http import NOT_DONE_YET
+from supervisor import slogger
 
 class Faults:
     UNKNOWN_METHOD = 1
@@ -72,6 +73,8 @@ class DeferredXMLRPCResponse:
             return ''
         try:
             try:
+                slogger.log("================\n")
+                slogger.log("calling %s\n" % self.callback)
                 value = self.callback()
                 if value is NOT_DONE_YET:
                     return NOT_DONE_YET
